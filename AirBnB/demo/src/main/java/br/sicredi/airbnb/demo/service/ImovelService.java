@@ -17,21 +17,14 @@ public class ImovelService {
 	@Autowired
 	RepositoryImovel repositoryImovel;
 
-
 	public List<Imovel> getAllImovel() {
 		return repositoryImovel.findAll();
 	}
 
-
-	public String createImovel(Imovel imovel, Long id) {
-
-		if (UsuarioService.usuariosLogados.stream().
-				anyMatch(usuario -> usuario.getId() == id && usuario.getTipo().equals("LOCADOR"))) {
+	public String createImovel(Imovel imovel) {
 			repositoryImovel.save(imovel);
-			return "Imóvel cadastrado com sucesso";
-		}
+			return "Imóvel cadastrado.";
 
-		return "Imóvel não cadastrado";
 	}
 }
 
