@@ -3,6 +3,8 @@ package br.sicredi.airbnb.demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import br.sicredi.airbnb.demo.exception.usuario.DadosInvalidosCadastroException;
+import br.sicredi.airbnb.demo.exception.usuario.UsuarioJaCadastradoException;
 import br.sicredi.airbnb.demo.model.Role;
 import br.sicredi.airbnb.demo.model.UsuarioModel;
 import br.sicredi.airbnb.demo.repository.UsuarioRepository;
@@ -13,13 +15,13 @@ import org.springframework.stereotype.Component;
 public class UsuarioService {
 
 	  @Autowired
-	  UsuarioRepository repositoryUsuario;
+	  UsuarioRepository usuarioRepository;
 
 
 
 	  public List<UsuarioModel> listAllUsuarios() {
 
-		  return repositoryUsuario.findAll();
+		  return usuarioRepository.findAll();
 	  }
 
 	  public String createUser(UsuarioModel user) {
@@ -27,29 +29,28 @@ public class UsuarioService {
 				  || user.getRole().toUpperCase().equals(Role.LOCADOR.getNome())
 				  || user.getRole().toUpperCase().equals(Role.LOCATARIO.getNome()) ){
 
-			  List<UsuarioModel> listUsuarios = listAllUsuarios();
-			  if(listUsuarios.stream().anyMatch((usuarioModel -> usuarioModel.getNomeUsuario().equals(user.getNomeUsuario())))) {
-				  return "Usuario ja existente no sistema.";
-			  }
-			  else {
-				  user.setRole(user.getRole().toUpperCase());
-				  repositoryUsuario.save(user);
+			  user.setRole(user.getRole().toUpperCase());
+
+			  try {
+				  usuarioRepository.save(user);
 				  return "Usuario cadastrado com sucesso.";
+			  } catch (Exception error){
+				  throw new UsuarioJaCadastradoException();
 			  }
 		  }
-		  return "Tipo de usuário incorreto.";
+		  throw new DadosInvalidosCadastroException();
 	  }
 
 	  public Optional<UsuarioModel> findUsuarioById(long id){
-		  return repositoryUsuario.findById(id);
+		  return usuarioRepository.findById(id);
 	  }
 
 	  public UsuarioModel findUsuarioByUsername(String username){
-		  return repositoryUsuario.findByNomeUsuario(username);
+		  return usuarioRepository.findByNomeUsuario(username);
 	  }
 
 	  public List<UsuarioModel> findAllByTipo(String tipo){
-		  return repositoryUsuario.findByRole(tipo);
+		  return usuarioRepository.findByRole(tipo);
 	  }
 
 }

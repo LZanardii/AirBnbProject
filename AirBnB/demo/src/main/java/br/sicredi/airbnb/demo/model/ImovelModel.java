@@ -16,7 +16,7 @@ public class ImovelModel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long idImovel;
 
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	private String nomeImovel;
 
 	@Column(nullable = false)

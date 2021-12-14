@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 public class LogException {
 
     public static ResponseEntity<String> error(HttpStatus status, String e) {
-        log.error("Exception : " + e);
+        log.error("Status: " + status + " -- " + "Exception : " + e );
         return ResponseEntity.status(status).body(e);
         //return new ResponseEntity<>(e, status);
     }

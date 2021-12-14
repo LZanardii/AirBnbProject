@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ImovelRepository extends JpaRepository<ImovelModel, Long>{
 
+    ImovelModel findByNomeImovel(String nomeImovel);
+
 }

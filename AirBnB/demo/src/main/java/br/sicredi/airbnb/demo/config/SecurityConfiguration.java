@@ -24,7 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/usuarios/**").hasAuthority(Role.ADMIN.getNome())
-                .antMatchers("/imoveis/**").hasAuthority(Role.LOCATARIO.getNome())
+                .antMatchers("/novo-imovel/**").hasAuthority(Role.LOCATARIO.getNome())
+                .antMatchers("/aluga-imovel/**").hasAuthority(Role.LOCADOR.getNome())
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
